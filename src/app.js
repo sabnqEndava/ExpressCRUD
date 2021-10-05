@@ -2,7 +2,9 @@ const express = require('express')
 const cors = require('cors')
 const app = express()
 const { connect } = require('./db')
-const { helloWorld } = require('./controllers/users')
+const { database , userDB, passDB } = require('./config/index')
+const usersRoutes = require('./routes/users')
+const loginRoutes = require('./routes/login')
 
 class App {
     constructor() {
@@ -13,16 +15,22 @@ class App {
 
     initApp() {
         app.use(cors())
-        app.use(express.json());
+        app.use(express.json()); 
     }
 
     routes() {
         // Routes
-        app.get('/', helloWorld);
+        app.use(usersRoutes)
+        app.use(loginRoutes)
+        app.use( (req, res) => {
+            res.status(400).json({
+                message: 'not found'
+            })
+        })
     }
 
     initDatabase() {
-        connect('mongodb+srv://AdminEndava:Endava2021@endava.yyroa.mongodb.net/Endava?retryWrites=true&w=majority')
+        connect(`mongodb+srv://${userDB}:${passDB}@endava.yyroa.mongodb.net/${database}?retryWrites=true&w=majority`)
     }
 
     initServer(port) {

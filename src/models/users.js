@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    email:  {
+    email: {
         type: String,
         required: true,
     },
@@ -23,7 +23,9 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     }
-});
+},
+    { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+);
 
 const User = mongoose.model("User", UserSchema);
 
